@@ -34,3 +34,4 @@ C:\Projects\NotificationTest\NotificationTest\NotificationApp\obj\Debug\net8.0\r
 C:\Projects\NotificationTest\NotificationTest\NotificationApp\obj\Debug\net8.0\NotificationApp.pdb
 C:\Projects\NotificationTest\NotificationTest\NotificationApp\obj\Debug\net8.0\NotificationApp.genruntimeconfig.cache
 C:\Projects\NotificationTest\NotificationTest\NotificationApp\obj\Debug\net8.0\ref\NotificationApp.dll
+C:\Projects\NotificationTest\NotificationTest\NotificationApp\obj\Debug\net8.0\NotificationApp.sourcelink.json

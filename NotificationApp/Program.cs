@@ -2,12 +2,29 @@
 using Allintra.Core.Case;
 using Allintra.Core.Case.EventNotifications.Application;
 
-public class StringNotificationReceiver : INotifiable<string>
+public class NotificationApp : IApp
+{
+    private NotificationReceiver _receiver;
+
+    public NotificationApp()
+    {
+        _receiver = new NotificationReceiver();
+    }
+
+    public void OnLoad( IAllintraCoreApp allintraCore  )
+    {
+        allintraCore.Subscribe( _receiver );
+    }
+
+
+}
+
+public class NotificationReceiver : INotifiable<ICase>
 {
 
-    public void ReceiveNotification( Notification<string> notification )
+    public void ReceiveNotification( Notification<ICase> notification )
     {
-        Console.WriteLine( "Received notification: " + notification.Item );
+        Console.WriteLine( $"Received notification: {notification.Item}" );
     }
 }
 
@@ -15,19 +32,14 @@ class Program
 {
     static void Main( string[] args )
     {
-        
-        var notifier = new Notifier<string>();  
+        var core = AllintraCore.Instance; 
 
-        // Create an instance of your notifiable
-        var receiver = new StringNotificationReceiver();
+        IApp notificationApp = new NotificationApp();
+        core.AddApp( notificationApp );
 
-        // Subscribe the notifiable to the notifier
-        notifier.Subscribe( receiver );
+        core.Run(); 
 
-        //NEED TO REMOVE: Example to trigger a notification
-        notifier.Notify( "New notification" );
-
-        Console.WriteLine( "Press any key to exit..." );
+        Console.WriteLine( "AllintraCore is now running. Press any key to exit..." );
         Console.ReadLine();
     }
 }
