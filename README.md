@@ -8,25 +8,44 @@ Para acessar as classes e interfaces da DLL, adicione a declaração using no to
 
 using Allintra.Core.Case.EventNotifications;
 
-Crie uma classe que implemente a interface INotifiable<string>. Exemplo:
+Crie uma classe que implemente a interface INotifiable<ICase>. Exemplo:
 
-public class StringNotificationReceiver : INotifiable<string>
+public class NotificationReceiver : INotifiable<ICase>
 {
-    public void ReceiveNotification(string message)
+
+    public void ReceiveNotification( Notification<ICase> notification )
     {
-        Console.WriteLine("Received notification: " + message);
+        Console.WriteLine( $"Received notification: {notification.Item}" );
     }
+}
+
+E uma que implemente o IApp
+
+public class NotificationApp : IApp
+{
+    private NotificationReceiver _receiver;
+
+    public NotificationApp()
+    {
+        _receiver = new NotificationReceiver();
+    }
+
+    public void OnLoad( IAllintraCoreApp allintraCore  )
+    {
+        allintraCore.Subscribe( _receiver );
+    }
+
+
 }
 
 No ponto de entrada da sua aplicação, crie uma instância da classe de notificações e registre para receber notificações:
 
-var receiver = new StringNotificationReceiver();
-var notifier = new Notifier<string>();
-notifier.Subscribe(receiver);
+var core = AllintraCore.Instance; 
 
-Utilize o método Notify para enviar notificações se quiser testar sua aplicação, depois de testar remova esse código:
+IApp notificationApp = new NotificationApp();
+core.AddApp( notificationApp );
 
-notifier.Notify("New Notification");
+core.Run(); 
 
 Justificativa para utilizar interfaces:
 Permite encapsular a lógica de notificação e facilita a manutenção e extensão do sistema. Clientes podem implementar suas próprias classes de recepção de notificações sem impactar outras partes do sistema.
